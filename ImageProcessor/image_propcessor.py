@@ -76,3 +76,31 @@ class ImageProcessor:
         blurred = cv2.GaussianBlur(self._image, (ksize, ksize), 0)
         self._image = blurred
         return blurred
+    def edge_detection(self):
+        if self._image is None:
+            return None
+        self.history_edge.append(copy.deepcopy(self._image))
+        gray = cv2.cvtColor(self._image, cv2.COLOR_BGR2GRAY) if len(self._image.shape) == 3 else self._image
+        edges = cv2.Canny(gray, 100, 200)
+        self._image = edges
+        return edges
+
+    def rotate(self, angle):
+        if self._image is None:
+            return None
+        self.history_rotate.append(copy.deepcopy(self._image))
+
+        if angle == 90:
+            rotated = cv2.rotate(self._image, cv2.ROTATE_90_CLOCKWISE)
+        elif angle == 180:
+            rotated = cv2.rotate(self._image, cv2.ROTATE_180)
+        elif angle == 270:
+            rotated = cv2.rotate(self._image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        else:
+            height, width = self._image.shape[:2]
+            center = (width // 2, height // 2)
+            matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+            rotated = cv2.warpAffine(self._image, matrix, (width, height))
+
+        self._image = rotated
+        return rotated

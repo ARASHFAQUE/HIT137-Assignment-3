@@ -124,3 +124,17 @@ class ImageEditorApp:
         name = os.path.basename(self.file_manager.file_path or "")
         h, w = image.shape[:2]
         self.status.config(text=f"{name} | {w} x {h}")
+
+ # ---------------- FILE ----------------
+    def open_image(self):
+        img = self.file_manager.open_image()
+        if img is not None:
+            self.processor.set_image(img)
+            self.display_image(img)
+
+    def save_image(self):
+        img = self.processor.get_image()
+        if img is not None:
+            path = self.file_manager.save(img)  # This will always ask
+        if path:
+            messagebox.showinfo("Saved", f"Image saved successfully:\n{path}")

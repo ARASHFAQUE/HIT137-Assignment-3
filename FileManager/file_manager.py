@@ -46,3 +46,20 @@ class FileManager:
             self.file_path = path
             return path
         return None
+
+    def add_history(self, image):
+        self.history.append(image.copy())
+        self.redo_stack.clear()
+
+    def undo(self):
+        if len(self.history) > 1:
+            self.redo_stack.append(self.history.pop())
+            return self.history[-1].copy()
+        return None
+
+    def redo(self):
+        if self.redo_stack:
+            img = self.redo_stack.pop()
+            self.history.append(img.copy())
+            return img.copy()
+        return None

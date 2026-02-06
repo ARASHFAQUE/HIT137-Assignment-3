@@ -1,4 +1,5 @@
 import tkinter as tk
+from ImageEditorApp.image_editor_app import ImageEditorApp
 
 def main():
     # Create the main Tkinter window

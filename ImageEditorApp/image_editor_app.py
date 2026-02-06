@@ -180,3 +180,53 @@ class ImageEditorApp:
     def resize_image(self):
         scale = self.resize_slider.get() / 100
         self.update_image(self.processor.resize(scale))
+
+        
+     # ---------------- FEATURE-SPECIFIC UNDO ----------------
+    def undo_grayscale(self):
+        img = self.processor.undo_grayscale()
+        if img is not None:
+            self.display_image(img)
+
+    def undo_blur(self):
+        img = self.processor.undo_blur()
+        if img is not None:
+            self.display_image(img)
+
+    def undo_edge(self):
+        img = self.processor.undo_edge()
+        if img is not None:
+            self.display_image(img)
+
+    def undo_rotate(self):
+        img = self.processor.undo_rotate()
+        if img is not None:
+            self.display_image(img)
+
+    def undo_flip(self):
+        img = self.processor.undo_flip()
+        if img is not None:
+            self.display_image(img)
+
+    def undo_resize(self):
+        img = self.processor.undo_resize()
+        if img is not None:
+            self.display_image(img)
+
+    def undo_brightness_contrast(self):
+        img = self.processor.undo_brightness_contrast()
+        if img is not None:
+            self.display_image(img)
+
+    # ---------------- GLOBAL UNDO/REDO ----------------
+    def undo(self):
+        img = self.file_manager.undo()
+        if img is not None:
+            self.processor.set_image(img)
+            self.display_image(img)
+
+    def redo(self):
+        img = self.file_manager.redo()
+        if img is not None:
+            self.processor.set_image(img)
+            self.display_image(img)

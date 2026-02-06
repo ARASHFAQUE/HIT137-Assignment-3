@@ -32,3 +32,75 @@ class ImageEditorApp:
 
         menubar.add_cascade(label="File", menu=file_menu)
         menubar.add_cascade(label="Edit", menu=edit_menu)
+     # ---------------- UI ----------------
+    def create_ui(self):
+        main_frame = tk.Frame(self.root)
+        main_frame.pack(fill=tk.BOTH, expand=True)
+
+        # ---- Control Panel ----
+        control_panel = tk.Frame(main_frame, width=250, relief=tk.RIDGE, bd=2)
+        control_panel.pack(side=tk.LEFT, fill=tk.Y, padx=5, pady=5)
+
+        tk.Label(control_panel, text="Control Panel", font=("Arial", 12, "bold")).pack(pady=5)
+
+        # Open / Save
+        tk.Button(control_panel, text="Open Image", command=self.open_image).pack(fill=tk.X, padx=10, pady=2)
+        tk.Button(control_panel, text="Save Image", command=self.save_image).pack(fill=tk.X, padx=10, pady=2)
+
+        # ----------------- Grayscale -----------------
+        tk.Button(control_panel, text="Grayscale", command=self.apply_grayscale).pack(fill=tk.X, padx=10, pady=2)
+        tk.Button(control_panel, text="Undo Grayscale", command=self.undo_grayscale).pack(fill=tk.X, padx=10, pady=2)
+
+        # ----------------- Blur -----------------
+        tk.Label(control_panel, text="Blur Intensity").pack()
+        self.blur_slider = tk.Scale(control_panel, from_=1, to=25, orient=tk.HORIZONTAL)
+        self.blur_slider.set(9)
+        self.blur_slider.pack(fill=tk.X, padx=10)
+        tk.Button(control_panel, text="Apply Blur", command=self.apply_blur).pack(fill=tk.X, padx=10, pady=2)
+        tk.Button(control_panel, text="Undo Blur", command=self.undo_blur).pack(fill=tk.X, padx=10, pady=2)
+
+        # ----------------- Edge Detection -----------------
+        tk.Button(control_panel, text="Edge Detection", command=self.apply_edges).pack(fill=tk.X, padx=10, pady=2)
+        tk.Button(control_panel, text="Undo Edge", command=self.undo_edge).pack(fill=tk.X, padx=10, pady=2)
+
+        # ----------------- Brightness / Contrast -----------------
+        tk.Label(control_panel, text="Brightness").pack()
+        self.brightness_slider = tk.Scale(control_panel, from_=-100, to=100, orient=tk.HORIZONTAL,
+                                          command=self.adjust_brightness)
+        self.brightness_slider.pack(fill=tk.X, padx=10)
+
+        tk.Label(control_panel, text="Contrast").pack()
+        self.contrast_slider = tk.Scale(control_panel, from_=10, to=300, orient=tk.HORIZONTAL,
+                                        command=self.adjust_contrast)
+        self.contrast_slider.set(100)
+        self.contrast_slider.pack(fill=tk.X, padx=10)
+
+        tk.Button(control_panel, text="Undo Brightness/Contrast", command=self.undo_brightness_contrast).pack(fill=tk.X, padx=10, pady=2)
+
+        # ----------------- Rotate -----------------
+        tk.Label(control_panel, text="Rotate").pack(pady=5)
+        tk.Button(control_panel, text="90°", command=lambda: self.rotate_image(90)).pack(fill=tk.X, padx=10)
+        tk.Button(control_panel, text="180°", command=lambda: self.rotate_image(180)).pack(fill=tk.X, padx=10)
+        tk.Button(control_panel, text="270°", command=lambda: self.rotate_image(270)).pack(fill=tk.X, padx=10)
+        tk.Button(control_panel, text="Undo Rotate", command=self.undo_rotate).pack(fill=tk.X, padx=10, pady=2)
+
+        # ----------------- Flip -----------------
+        tk.Label(control_panel, text="Flip").pack(pady=5)
+        tk.Button(control_panel, text="Horizontal", command=lambda: self.flip_image(1)).pack(fill=tk.X, padx=10)
+        tk.Button(control_panel, text="Vertical", command=lambda: self.flip_image(0)).pack(fill=tk.X, padx=10)
+        tk.Button(control_panel, text="Undo Flip", command=self.undo_flip).pack(fill=tk.X, padx=10, pady=2)
+
+        # ----------------- Resize -----------------
+        tk.Label(control_panel, text="Resize (%)").pack()
+        self.resize_slider = tk.Scale(control_panel, from_=10, to=200, orient=tk.HORIZONTAL)
+        self.resize_slider.set(100)
+        self.resize_slider.pack(fill=tk.X, padx=10)
+        tk.Button(control_panel, text="Apply Resize", command=self.resize_image).pack(fill=tk.X, padx=10, pady=5)
+        tk.Button(control_panel, text="Undo Resize", command=self.undo_resize).pack(fill=tk.X, padx=10, pady=2)
+
+        # ---- Image Display ----
+        self.image_label = tk.Label(main_frame)
+        self.image_label.pack(expand=True)
+
+        self.status = tk.Label(self.root, text="No image loaded", relief=tk.SUNKEN, anchor="w")
+        self.status.pack(side=tk.BOTTOM, fill=tk.X)

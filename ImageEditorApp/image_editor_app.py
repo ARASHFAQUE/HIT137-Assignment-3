@@ -5,12 +5,18 @@ import cv2
 import os
 
 
+from ImageProcessor.image_propcessor import ImageProcessor
+from FileManager.file_manager import FileManager
+
+
 
 class ImageEditorApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Sydney Group-1 Image Editor Assignment-3")
         self.root.geometry("1200x750")
+        self.processor = ImageProcessor()
+        self.file_manager = FileManager()
         self.create_menu()
         self.create_ui()
 
@@ -181,7 +187,7 @@ class ImageEditorApp:
         scale = self.resize_slider.get() / 100
         self.update_image(self.processor.resize(scale))
 
-        
+
      # ---------------- FEATURE-SPECIFIC UNDO ----------------
     def undo_grayscale(self):
         img = self.processor.undo_grayscale()

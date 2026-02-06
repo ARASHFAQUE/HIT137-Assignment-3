@@ -138,3 +138,45 @@ class ImageEditorApp:
             path = self.file_manager.save(img)  # This will always ask
         if path:
             messagebox.showinfo("Saved", f"Image saved successfully:\n{path}")
+
+    def save_as(self):
+        img = self.processor.get_image()
+        if img is not None:
+            self.file_manager.save_as(img)
+
+    def update_image(self, img):
+        if img is not None:
+            self.processor.set_image(img)
+            self.file_manager.add_history(img)
+            self.display_image(img)
+
+    # ---------------- ACTIONS ----------------
+    def apply_grayscale(self):
+        self.update_image(self.processor.grayscale())
+
+    def apply_blur(self):
+        k = self.blur_slider.get()
+        if k % 2 == 0:
+            k += 1
+        self.update_image(self.processor.blur(k))
+
+    def apply_edges(self):
+        self.update_image(self.processor.edge_detection())
+
+    def adjust_brightness(self, value):
+        img = self.processor.adjust_brightness_contrast(int(value), None)
+        self.display_image(img)
+
+    def adjust_contrast(self, value):
+        img = self.processor.adjust_brightness_contrast(None, int(value) / 100)
+        self.display_image(img)
+
+    def rotate_image(self, angle):
+        self.update_image(self.processor.rotate(angle))
+
+    def flip_image(self, mode):
+        self.update_image(self.processor.flip(mode))
+
+    def resize_image(self):
+        scale = self.resize_slider.get() / 100
+        self.update_image(self.processor.resize(scale))

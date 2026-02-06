@@ -104,3 +104,36 @@ class ImageProcessor:
 
         self._image = rotated
         return rotated
+
+    def flip(self, mode):
+        if self._image is None:
+            return None
+        self.history_flip.append(copy.deepcopy(self._image))
+        flipped = cv2.flip(self._image, mode)
+        self._image = flipped
+        return flipped
+
+    def resize(self, scale):
+        if self._image is None:
+            return None
+        self.history_resize.append(copy.deepcopy(self._image))
+        height, width = self._image.shape[:2]
+        new_size = (int(width * scale), int(height * scale))
+        resized = cv2.resize(self._image, new_size, interpolation=cv2.INTER_AREA)
+        self._image = resized
+        return resized
+
+    def adjust_brightness_contrast(self, brightness=None, contrast=None):
+        if self._image is None:
+            return None
+        self.history_brightness_contrast.append(copy.deepcopy(self._image))
+        img = self._image.astype(np.float32)
+
+        if contrast is not None:
+            img = img * contrast
+        if brightness is not None:
+            img = img + brightness
+
+        img = np.clip(img, 0, 255).astype(np.uint8)
+        self._image = img
+        return img

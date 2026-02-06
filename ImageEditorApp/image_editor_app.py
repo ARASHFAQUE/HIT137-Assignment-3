@@ -104,3 +104,23 @@ class ImageEditorApp:
 
         self.status = tk.Label(self.root, text="No image loaded", relief=tk.SUNKEN, anchor="w")
         self.status.pack(side=tk.BOTTOM, fill=tk.X)
+
+        
+     # ---------------- DISPLAY ----------------
+    def display_image(self, image):
+        if image is None:
+            return
+
+        if len(image.shape) == 2:
+            image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+
+        rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        pil = Image.fromarray(rgb)
+        pil.thumbnail((900, 650))
+
+        self.tk_img = ImageTk.PhotoImage(pil)
+        self.image_label.config(image=self.tk_img)
+
+        name = os.path.basename(self.file_manager.file_path or "")
+        h, w = image.shape[:2]
+        self.status.config(text=f"{name} | {w} x {h}")
